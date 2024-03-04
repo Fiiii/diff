@@ -69,11 +69,11 @@ func TestDelta(t *testing.T) {
 				Changes: []Change{{0, []byte("abc"), []byte("def")}}}},
 		}
 		for i, tc := range deltaTestsCases {
-			testID := i + 1
+			testID := i + 2
 			t.Logf("\tTest %d:\tWhen handling delta calculation for original: `%s` and updated: `%s`.",
 				testID, tc.originalData, tc.updatedData)
 			{
-
+				t.Fatalf("\t%s\tTest %d:\tShould be able to return proper calculated delta.", Failed, testID)
 			}
 		}
 	}

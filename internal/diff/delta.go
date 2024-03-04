@@ -45,7 +45,15 @@ func divideIntoChunks(chunkSize int, data []byte) []Chunk {
 
 // calculateRollingHashes calculates the rolling hashes for each chunk.
 func calculateRollingHashes(chunks []Chunk) []uint64 {
-	return []uint64{}
+	var hashes []uint64
+	for i, _ := range chunks {
+		var rollingHash uint64
+		for j, _ := range chunks[i].Data {
+			rollingHash = rollingHash*primeRK + uint64(chunks[i].Data[j])
+		}
+		hashes = append(hashes, rollingHash)
+	}
+	return hashes
 }
 
 // compareHashes compares the hashes of the original and updated chunks to generate a delta.
