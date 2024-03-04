@@ -25,8 +25,14 @@ type Chunk struct {
 }
 
 // GenerateDelta generates a delta between the original and updated byte slices.
-func GenerateDelta() (Delta, error) {
-	return Delta{}, nil
+func GenerateDelta(chunkSize int, original, updated []byte) (Delta, error) {
+	originalChunks := divideIntoChunks(chunkSize, original)
+	updatedChunks := divideIntoChunks(chunkSize, updated)
+
+	originalHashes := calculateRollingHashes(originalChunks)
+	updatedHashes := calculateRollingHashes(updatedChunks)
+
+	return compareHashes(originalChunks, updatedChunks, originalHashes, updatedHashes), nil
 }
 
 // divideIntoChunks divides the data into chunks of size chunkSize.
@@ -57,6 +63,33 @@ func calculateRollingHashes(chunks []Chunk) []uint64 {
 }
 
 // compareHashes compares the hashes of the original and updated chunks to generate a delta.
-func compareHashes() Delta {
-	return Delta{}
+func compareHashes(originalChunks, updatedChunks []Chunk, originalHashes, updatedHashes []uint64) Delta {
+	var delta Delta
+
+	minLength := len(originalHashes)
+	if len(updatedHashes) < minLength {
+		minLength = len(updatedHashes)
+	}
+
+	for i := 0; i < minLength; i++ {
+		if originalHashes[i] == updatedHashes[i] {
+			delta.ChunksToReuse = append(delta.ChunksToReuse, originalChunks[i])
+		} else {
+			delta.Changes = append(delta.Changes, Change{
+				Position: originalChunks[i].Position,
+				OldData:  originalChunks[i].Data,
+				NewData:  updatedChunks[i].Data,
+			})
+		}
+	}
+
+	for i := minLength; i < len(originalHashes); i++ {
+		delta.Removals = append(delta.Removals, originalChunks[i])
+	}
+
+	for i := minLength; i < len(updatedHashes); i++ {
+		delta.Additions = append(delta.Additions, updatedChunks[i])
+	}
+
+	return delta
 }

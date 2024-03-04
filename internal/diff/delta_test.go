@@ -73,7 +73,18 @@ func TestDelta(t *testing.T) {
 			t.Logf("\tTest %d:\tWhen handling delta calculation for original: `%s` and updated: `%s`.",
 				testID, tc.originalData, tc.updatedData)
 			{
-				t.Fatalf("\t%s\tTest %d:\tShould be able to return proper calculated delta.", Failed, testID)
+				output, err := GenerateDelta(testChunkSize, tc.originalData, tc.updatedData)
+				if err != nil {
+					t.Fatalf("\t%s\tTest %d:\tShould be able to return proper calculated delta.", Failed, testID)
+				}
+
+				if reflect.DeepEqual(output, tc.delta) {
+					t.Logf("\t%s\tTest %d:\tShould be able to return delta == %+v.", Success, testID, tc.delta)
+				} else {
+					t.Logf("got: %v", output)
+					t.Logf("exp: %v", tc.delta)
+					t.Fatalf("\t%s\tTest %d:\tShould be able to return equal delta.", Failed, testID)
+				}
 			}
 		}
 	}
