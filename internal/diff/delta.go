@@ -1,6 +1,11 @@
 // Package diff provides a way to generate a delta between two byte slices.
 package diff
 
+const (
+	// primeRK is the prime base used in Rabin-Karp algorithm.
+	primeRK = 16777619
+)
+
 type Delta struct {
 	ChunksToReuse []Chunk
 	Changes       []Change
@@ -26,7 +31,16 @@ func GenerateDelta() (Delta, error) {
 
 // divideIntoChunks divides the data into chunks of size chunkSize.
 func divideIntoChunks(chunkSize int, data []byte) []Chunk {
-	return []Chunk{}
+	var chunks []Chunk
+
+	for i := 0; i < len(data); i += chunkSize {
+		end := i + chunkSize
+		if end > len(data) {
+			end = len(data)
+		}
+		chunks = append(chunks, Chunk{Position: i, Data: data[i:end]})
+	}
+	return chunks
 }
 
 // calculateRollingHashes calculates the rolling hashes for each chunk.

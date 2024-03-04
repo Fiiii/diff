@@ -15,19 +15,37 @@ func TestDelta(t *testing.T) {
 	t.Log("Given the need to work with chunks division")
 	{
 		testID := 0
-		t.Logf("\tTest %d:\tWhen calculating chunks hashes.", testID)
+		t.Logf("\tTest %d:\tWhen dividing into chunks.", testID)
 		{
 			originalData := []byte("hello")
-			expHashes := []uint64{0}
+			// Assuming 3 is the chunk size
+			expChunks := []Chunk{{0, []byte("hel")}, {3, []byte("lo")}}
+			chunks := divideIntoChunks(testChunkSize, originalData)
+
+			if reflect.DeepEqual(chunks, expChunks) {
+				t.Logf("\t%s\tTest %d:\tShould be able to return proper divided chunks.", Success, testID)
+			} else {
+				t.Logf("got: %v", chunks)
+				t.Logf("exp: %v", expChunks)
+				t.Fatalf("\t%s\tTest %d:\tShould be able to return proper divided chunks.", Failed, testID)
+			}
+		}
+
+		testID = 1
+		t.Logf("\tTest %d:\tWhen calculating rolling hashes.", testID)
+		{
+			originalData := []byte("hello")
+			// Based on "good" hashing prime number
+			expHashes := []uint64{29274805622692371, 1811982963}
 			chunks := divideIntoChunks(testChunkSize, originalData)
 			hashes := calculateRollingHashes(chunks)
 
 			if reflect.DeepEqual(hashes, expHashes) {
-				t.Logf("\t%s\tTest %d:\tShould be able to return proper divided chunks.", Success, testID)
+				t.Logf("\t%s\tTest %d:\tShould be able to return calculated hashed chunks.", Success, testID)
 			} else {
 				t.Logf("got: %v", hashes)
 				t.Logf("exp: %v", expHashes)
-				t.Fatalf("\t%s\tTest %d:\tShould be able to return proper divided chunks.", Failed, testID)
+				t.Fatalf("\t%s\tTest %d:\tShould be able to return calculated hashed chunks.", Failed, testID)
 			}
 		}
 	}
