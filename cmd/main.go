@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/fiiii/diff/internal/reader"
 	"os"
 	"strconv"
 
 	"github.com/fiiii/diff/internal/diff"
-	"github.com/fiiii/diff/internal/diff/reader"
 )
 
 const (
@@ -69,21 +69,5 @@ func main() {
 		return
 	}
 
-	for _, chunk := range delta.ChunksToReuse {
-		fmt.Printf("Chunk at position %d is reusable\n", chunk.Position)
-	}
-
-	for _, change := range delta.Changes {
-		fmt.Printf("Change at position %d:\n", change.Position)
-		fmt.Printf("  Old Data: %s\n", string(change.OldData))
-		fmt.Printf("  New Data: %s\n", string(change.NewData))
-	}
-
-	for _, removal := range delta.Removals {
-		fmt.Printf("Chunk at position %d removed\n", removal.Position)
-	}
-
-	for _, addition := range delta.Additions {
-		fmt.Printf("Chunk at position %d added\n", addition.Position)
-	}
+	delta.Print()
 }

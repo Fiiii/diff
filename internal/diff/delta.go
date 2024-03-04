@@ -1,6 +1,8 @@
 // Package diff provides a way to generate a delta between two byte slices.
 package diff
 
+import "fmt"
+
 const (
 	// primeRK is the prime base used in Rabin-Karp algorithm.
 	primeRK = 16777619
@@ -92,4 +94,25 @@ func compareHashes(originalChunks, updatedChunks []Chunk, originalHashes, update
 	}
 
 	return delta
+}
+
+// Print prints the delta to the console.
+func (d *Delta) Print() {
+	for _, chunk := range d.ChunksToReuse {
+		fmt.Printf("Chunk at position %d is reusable\n", chunk.Position)
+	}
+
+	for _, change := range d.Changes {
+		fmt.Printf("Change at position %d:\n", change.Position)
+		fmt.Printf("  Old Data: %s\n", string(change.OldData))
+		fmt.Printf("  New Data: %s\n", string(change.NewData))
+	}
+
+	for _, removal := range d.Removals {
+		fmt.Printf("Chunk at position %d removed\n", removal.Position)
+	}
+
+	for _, addition := range d.Additions {
+		fmt.Printf("Chunk at position %d added\n", addition.Position)
+	}
 }
