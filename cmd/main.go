@@ -11,8 +11,8 @@ import (
 
 const (
 	defaultChunkSize = 3
-	defaultFile1     = "original"
-	defaultFile2     = "updated"
+	defaultFile1     = "cmd/original"
+	defaultFile2     = "cmd/updated"
 )
 
 // Hashing function gets the data as a parameter. Separate possible filesystem operations.
@@ -35,6 +35,11 @@ func main() {
 			chunkSize = defaultChunkSize
 		} else {
 			chunkSize = cs
+		}
+
+		if err != nil {
+			fmt.Println("Error getting working directory:", err)
+			return
 		}
 
 		file1 = os.Args[2]
