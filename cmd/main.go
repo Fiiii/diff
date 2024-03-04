@@ -5,8 +5,8 @@ import (
 	"os"
 	"strconv"
 
-	"diff/internal/diff"
-	"diff/internal/diff/reader"
+	"github.com/fiiii/diff/internal/diff"
+	"github.com/fiiii/diff/internal/diff/reader"
 )
 
 const (
