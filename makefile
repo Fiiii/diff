@@ -14,7 +14,6 @@ run: build
 	@echo "Running $(NAME) with arguments: $(ARGS)"
 	cd cmd && ./$(NAME) $(ARGS)
 
-# Clean up the built executable
-clean:
-	@echo "Cleaning up..."
-	rm -f $(NAME)
+test:
+	@echo "Running tests..."
+	go test -v ./...
