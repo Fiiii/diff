@@ -16,4 +16,9 @@
 #  ARGS="<chunk size> <original/file1 name> <updated/file2 name>"
 $ make run ARGS="2 original updated"
 ```
+
+### 🧪 Testing
+```makefile
+$ make test
+```
 ---
