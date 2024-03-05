@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/fiiii/diff/internal/reader"
 	"os"
 	"strconv"
 
 	"github.com/fiiii/diff/internal/diff"
+	"github.com/fiiii/diff/internal/reader"
 )
 
 const (
